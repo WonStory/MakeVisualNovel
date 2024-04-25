@@ -1,18 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class DialogueContainer : MonoBehaviour
+[System.Serializable]
+
+public class DialogueContainer
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public GameObject root;
+    public TextMeshProUGUI nameText;
+    public TextMeshProUGUI dialogueText;
 }
