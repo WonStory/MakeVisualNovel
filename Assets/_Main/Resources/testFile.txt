@@ -1,0 +1,5 @@
+john "hello"
+
+world "nice too meet you"
+
+narrator "shut up"
