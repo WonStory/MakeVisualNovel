@@ -74,13 +74,9 @@ namespace DIALOGUE
             {
                 dialogueSystem.ShowSpeakerName(line.speaker);
             }
-            else
-            {
-                dialogueSystem.HideSpeakerName();
-            }
 
             //이제 대화를 빌드해보자
-            yield return BuildDialogue(line.dialogue);
+            yield return BuildLineSegments(line.dialogue);
 
             //사용자 입력을 기다려야댐
             yield return WaitForUserInput();
@@ -92,10 +88,46 @@ namespace DIALOGUE
             yield return null;
         }
 
-        IEnumerator BuildDialogue(string dialogue)
+        IEnumerator BuildLineSegments(DL_DIALOGUE_DATA line)
         {
-            architection.Build(dialogue);
+            for (int i = 0; i < line.segments.Count; i++)
+            {
+                DL_DIALOGUE_DATA.DIALOGUE_SEGMENT segment = line.segments[i];
 
+                yield return WaitForDialogueSegmentSignalToBeTriggered(segment);
+
+                yield return BuildDialogue(segment.dialogue, segment.appendText);
+            }
+        }
+
+        IEnumerator WaitForDialogueSegmentSignalToBeTriggered(DL_DIALOGUE_DATA.DIALOGUE_SEGMENT segment)
+        {
+            switch (segment.startSignal)
+            {
+                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.C:
+                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.A:
+                yield return WaitForUserInput(); //c나 a는 유저의 인풋을 기다린다.
+                    break;
+                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.WC:    
+                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.WA:
+                    yield return new WaitForSeconds(segment.signalDelay);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        IEnumerator BuildDialogue(string dialogue, bool append = false)
+        {//빌드 다이어로그
+            if (!append)
+            {
+                architection.Build(dialogue);
+            }
+            else
+            {
+                architection.Append(dialogue);
+            }
+            //다이어로그 빌드까지 기다리기
             while (architection.isBuilding)
             {
                 if (userPrompt)

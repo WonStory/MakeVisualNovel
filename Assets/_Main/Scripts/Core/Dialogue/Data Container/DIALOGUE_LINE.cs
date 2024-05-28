@@ -8,18 +8,18 @@ namespace DIALOGUE
     {
 
 
-        public string speaker;
-        public string dialogue;
+        public DL_SPEAKER_DATA speaker;
+        public DL_DIALOGUE_DATA dialogue;
         public string commands; //일단 단순하게 유지
 
-        public bool hasSpeaker => speaker != string.Empty;
-        public bool hasDialogue => dialogue != string.Empty;
+        public bool hasSpeaker => false; //speaker != string.Empty;
+        public bool hasDialogue => dialogue.hasDialogue;
         public bool hasCommands => commands != string.Empty;
  
         public DIALOGUE_LINE(string speaker, string dialogue, string commands)
         {
-            this.speaker = speaker;
-            this.dialogue = dialogue;
+            this.speaker = new DL_SPEAKER_DATA(speaker);
+            this.dialogue = new DL_DIALOGUE_DATA(dialogue);
             this.commands = commands;
         }
  

@@ -12,7 +12,7 @@ namespace DIALOGUE
         private ConversationManager conversationManager;
         private TextArchitection architection;
 
-        public static DialogueSystem instance;
+        public static DialogueSystem instance {get; private set;} //공개적이고 스태틱이라 언제든 바뀔 수 있었는데 이제 제한을 걸음, 대화시스템으로만 가능
 
         public delegate void DialogueSystemEvent();
         public event DialogueSystemEvent onUserPrompt_Next;

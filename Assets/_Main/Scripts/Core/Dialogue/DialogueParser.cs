@@ -7,7 +7,7 @@ namespace DIALOGUE
 {
     public class DialogueParser
     {
-        private const string commandRegexPattern = "\\w*[^\\s]\\("; //명령정규식 패턴 *은 여러 아규를 나타낸다
+        private const string commandRegexPattern = @"\w*[^\s]\("; //명령정규식 패턴 *은 여러 아규를 나타낸다 @로 나타내면 \를 하나만 해도 된다.
 
 
         public static DIALOGUE_LINE Parse(string rawline)

@@ -1,5 +1,7 @@
-john "hello"
+john "hello. i am anfksaka sdnksadnksa nsandk.{a} asdsajndnajsd?"
 
-world "nice too meet you. nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you."
+world "nice too meet you. nice too meet you. {c}nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you."
 
-narrator "shut up"
+narrator "wait. {wa 2} shut up"
+
+john "sorry. {wc 0.5} i am anfksaka sdnksadnksa nsandk.{a} asdsajndnajsd?"
