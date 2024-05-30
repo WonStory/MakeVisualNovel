@@ -17,6 +17,45 @@ public class TestDialogueFiles : MonoBehaviour
         {
             List<string> lines = FileManager.ReadTextAsset(fileToRead);
 
+            foreach (string line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+
+                DIALOGUE_LINE dl = DialogueParser.Parse(line);
+
+                for (int i = 0; i < dl.commandData.commands.Count; i++)
+                {
+                    DL_COMMAND_DATA.Command command = dl.commandData.commands[i];
+                    Debug.Log($"Command[{i}] '{command.name}' has argumrnts [{string.Join(", ",command.arguments)}]");
+                }
+            }
+
+/*
+            for (int i = 0; i < lines.Count; i++)
+            {
+                string line = lines[i];
+
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+
+                DIALOGUE_LINE dl = DialogueParser.Parse(line);
+
+                Debug.Log($"{dl.speaker.name} as [{(dl.speaker.castName != string.Empty ? dl.speaker.castName : dl.speaker.name)}] at {dl.speaker.castPosition}");
+
+                List<(int l, string ex)> expr = dl.speaker.CastExpresstions;
+                for (int c = 0; c < expr.Count; c++)
+                {
+                    Debug.Log($"[Layer[{expr[c].l}] = '{expr[c].ex}']");
+                }
+            
+            }
+*/
+
 /*
             foreach (string line in lines)
             {
@@ -35,6 +74,6 @@ public class TestDialogueFiles : MonoBehaviour
                 }
             }
 */
-            DialogueSystem.instance.Say(lines);
+            //DialogueSystem.instance.Say(lines);
         }
 }

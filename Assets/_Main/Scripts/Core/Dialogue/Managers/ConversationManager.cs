@@ -72,11 +72,11 @@ namespace DIALOGUE
         {
             if (line.hasSpeaker)//박스를 숨길지 말지 판단
             {
-                dialogueSystem.ShowSpeakerName(line.speaker);
+                dialogueSystem.ShowSpeakerName(line.speakerData.displayname);
             }
 
             //이제 대화를 빌드해보자
-            yield return BuildLineSegments(line.dialogue);
+            yield return BuildLineSegments(line.dialogueData);
 
             //사용자 입력을 기다려야댐
             yield return WaitForUserInput();
@@ -84,7 +84,7 @@ namespace DIALOGUE
 
         IEnumerator Line_RunCommands(DIALOGUE_LINE line)
         {
-            Debug.Log(line.commands);
+            Debug.Log(line.commandData);
             yield return null;
         }
 

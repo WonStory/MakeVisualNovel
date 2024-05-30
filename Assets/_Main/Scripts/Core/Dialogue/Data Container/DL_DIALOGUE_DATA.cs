@@ -8,8 +8,6 @@ public class DL_DIALOGUE_DATA
     public List<DIALOGUE_SEGMENT> segments;//목록으로 만들고 그것을 segments라고 명명함
     private const string segmentIdentifierPattern = @"\{[ca]\}|\{w[ca]\s\d*\.?\d*\}";//@를 사용하여 문장 시작 s는 공백 d는 숫자(정수)
 
-    public bool hasDialogue => segments.Count > 0;
-
     public DL_DIALOGUE_DATA(string rawDialogue)
     {
         segments = RipSegments(rawDialogue);
