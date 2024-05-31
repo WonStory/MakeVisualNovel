@@ -17,6 +17,7 @@ public class TestDialogueFiles : MonoBehaviour
         {
             List<string> lines = FileManager.ReadTextAsset(fileToRead);
 
+/*
             foreach (string line in lines)
             {
                 if (string.IsNullOrWhiteSpace(line))
@@ -32,6 +33,7 @@ public class TestDialogueFiles : MonoBehaviour
                     Debug.Log($"Command[{i}] '{command.name}' has argumrnts [{string.Join(", ",command.arguments)}]");
                 }
             }
+*/
 
 /*
             for (int i = 0; i < lines.Count; i++)
@@ -74,6 +76,6 @@ public class TestDialogueFiles : MonoBehaviour
                 }
             }
 */
-            //DialogueSystem.instance.Say(lines);
+            DialogueSystem.instance.Say(lines);
         }
 }

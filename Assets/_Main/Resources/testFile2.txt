@@ -1,5 +1,6 @@
+print_1p("This is a command running stratght from our dialogue file!")
 
-
+John "Move Left, Move Right" print_1p("Start Moving), [wait]moveCharDemo(left), [wait]moveCharDemo(right), print_1p("done Moving)
 
 Elen as ?? "hellohellohellohellohellohello" playSong("funk beats" -v -90.75 -p 1), setmood(chill)
 

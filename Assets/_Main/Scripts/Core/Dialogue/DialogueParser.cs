@@ -7,7 +7,7 @@ namespace DIALOGUE
 {
     public class DialogueParser
     {
-        private const string commandRegexPattern = @"\w*[^\s]\("; //명령정규식 패턴 *은 여러 아규를 나타낸다 @로 나타내면 \를 하나만 해도 된다.
+        private const string commandRegexPattern = @"[\w\[\]]*[^\s]\("; //명령정규식 패턴 *은 여러 아규를 나타낸다 @로 나타내면 \를 하나만 해도 된다.
 
 
         public static DIALOGUE_LINE Parse(string rawline)
@@ -57,15 +57,19 @@ namespace DIALOGUE
             //Debug.Log(rawline.Substring(dialogueStart + 1, (dialogueEnd - dialogueStart) - 1)); 인덱싱을 보여줌(2번째건 문자 개수 이므로 빼줘서 개수를 구한다)
 
             Regex commandRegex = new Regex(commandRegexPattern);
-            Match match = commandRegex.Match(rawline);
+            MatchCollection matches = commandRegex.Matches(rawline);
             int commandStart = -1;
-            if (match.Success)
+            foreach (Match match in matches)
             {
-                commandStart = match.Index;//음수로 설정해 놓고 맞으면 인덱스로 갈아넣음
-
-                if (dialogueStart == -1 && dialogueEnd == -1)
-                    return ("", "", rawline.Trim());//스피커랑 대화는 빠져있으므로 ""로 나타냄
+                if (match.Index < dialogueStart || match.Index > dialogueEnd)
+                {
+                    commandStart = match.Index;//음수로 설정해 놓고 맞으면 인덱스로 갈아넣음
+                    break;
+                }
             }
+
+            if (commandStart != -1 && (dialogueStart == -1 && dialogueEnd == -1))
+                return ("", "", rawline.Trim());//스피커랑 대화는 빠져있으므로 ""로 나타냄
 
             if (dialogueStart != -1 && dialogueEnd != -1 && (commandStart == -1 || commandStart > dialogueEnd)) //간단히 수학적비교를 통해 어딕 어디인지 파악함
             {
@@ -82,7 +86,7 @@ namespace DIALOGUE
             }
             else
             {
-                speaker = rawline;
+                dialogue = rawline;
             }
 
             return (speaker, dialogue, commands);
