@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using CHARACTERS;
 
 
 namespace DIALOGUE
@@ -44,6 +45,22 @@ namespace DIALOGUE
 
             architection = new TextArchitection(dialogueContainer.dialogueText);
             conversationManager = new ConversationManager(architection);
+        }
+
+        public void ApplySpeakerDataToDialogueContainer(string speakerName)
+        {
+            Character character = CharacterManager.instance.GetCharacter(speakerName);
+            CharacterConfigData config = character != null ? character.config : CharacterManager.instance.GetCharacterConfig(speakerName);
+        
+            ApplySpeakerDataToDialogueContainer(config); //이렇게 분리해놓으면 데이터가 없을 때 이름으로 호출이 가능하고, 데이터가 있으면 직접 호출이 가능해진다.
+        }
+
+        public void ApplySpeakerDataToDialogueContainer(CharacterConfigData config)
+        {
+            dialogueContainer.SetDialogueColor(config.dialogueColor);
+            dialogueContainer.SetDialogueFont(config.dialogueFont);
+            dialogueContainer.nameContainer.SetNameColor(config.nameColor);
+            dialogueContainer.nameContainer.SetNameFont(config.nameFont);
         }
 
         public void OnUserPrompt_Next()

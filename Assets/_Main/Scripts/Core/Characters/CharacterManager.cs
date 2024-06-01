@@ -18,6 +18,26 @@ namespace CHARACTERS
             instance = this;
         }
 
+        public CharacterConfigData GetCharacterConfig(string characterName)
+        {
+            return config.GetConfig(characterName);
+        }
+
+        public Character GetCharacter(string chaacterName, bool createIfDoesNotExist = false)
+        {
+            if (characters.ContainsKey(chaacterName.ToLower()))
+            {
+                return characters[chaacterName.ToLower()];
+            }
+            else if (createIfDoesNotExist)
+            {
+                return CreateCharacter(chaacterName);
+            }
+            
+            return null; //존재하지 않으면 생성 x
+
+        }
+
         public Character CreateCharacter(string characterName)
         {
             if (characters.ContainsKey(characterName.ToLower())) //중복되는지 확인하는 키
@@ -52,19 +72,19 @@ namespace CHARACTERS
 
             if (config.characterType == Character.CharacterType.Text)
             {
-                return new Character_Text(Info.name);
+                return new Character_Text(Info.name, config); //config를 넣음으로써 이름과 고유한 데이터가 들어간다.
             }
             if (config.characterType == Character.CharacterType.Sprite || config.characterType == Character.CharacterType.SpriteSheet)
             {
-                return new Character_Sprite(Info.name);
+                return new Character_Sprite(Info.name, config);
             }
             if (config.characterType == Character.CharacterType.Live2D)
             {
-                return new Character_Live2D(Info.name);
+                return new Character_Live2D(Info.name, config);
             }
             if (config.characterType == Character.CharacterType.Model3D)
             {
-                return new Character_Model3D(Info.name);
+                return new Character_Model3D(Info.name, config);
             }
 
             return null;

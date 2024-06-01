@@ -21,6 +21,8 @@ namespace TESTING
         IEnumerator Test()
         {
             Character Elen = CharacterManager.instance.CreateCharacter("Elen");
+            Character Adam = CharacterManager.instance.CreateCharacter("Adam");
+            Character Ben = CharacterManager.instance.CreateCharacter("Benjamin");
             List<string> lines = new List<string>()
             {
                 "\"Hi!\"",
@@ -29,6 +31,14 @@ namespace TESTING
                 "And a last one."
             };
             yield return Elen.Say(lines);
+
+            lines = new List<string>()
+            {
+                "iam ironman"
+            };
+            yield return Adam.Say(lines);
+
+            yield return Ben.Say("fuck");
 
             Debug.Log("Finished");
         }

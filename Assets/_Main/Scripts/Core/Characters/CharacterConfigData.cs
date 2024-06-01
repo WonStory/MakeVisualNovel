@@ -14,10 +14,10 @@ namespace CHARACTERS
         public Character.CharacterType characterType;
 
         public Color nameColor;
-        public Color DialogueColor;
+        public Color dialogueColor;
 
         public TMP_FontAsset nameFont;
-        public TMP_FontAsset DialogueFont;
+        public TMP_FontAsset dialogueFont;
 
         public CharacterConfigData Copy() //원본데이터를 유지하고 복사하여서 복사한걸로 활용하기 위해
         {
@@ -27,9 +27,9 @@ namespace CHARACTERS
             result.alias = alias;//복사본을 만드는 중
             result.characterType = characterType;
             result.nameFont = nameFont;
-            result.DialogueFont = DialogueFont;
+            result.dialogueFont = dialogueFont;
             result.nameColor = new Color(nameColor.r, nameColor.g, nameColor.b, nameColor.a);
-            result.DialogueColor = new Color(DialogueColor.r, DialogueColor.g, DialogueColor.b, DialogueColor.a);
+            result.dialogueColor = new Color(dialogueColor.r, dialogueColor.g, dialogueColor.b, dialogueColor.a);
 
 
 
@@ -50,10 +50,10 @@ namespace CHARACTERS
                 result.characterType = Character.CharacterType.Text;
 
                 result.nameFont = defaultFont;
-                result.DialogueFont = defaultFont;
+                result.dialogueFont = defaultFont;
 
                 result.nameColor = new Color(defaultColor.r,defaultColor.g,defaultColor.b,defaultColor.a);
-                result.DialogueColor = new Color(defaultColor.r,defaultColor.g,defaultColor.b,defaultColor.a);
+                result.dialogueColor = new Color(defaultColor.r,defaultColor.g,defaultColor.b,defaultColor.a);
 
                 return result;
             }
