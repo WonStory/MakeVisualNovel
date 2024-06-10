@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using CHARACTERS;
 using DIALOGUE;
+using TMPro;
 
 namespace TESTING
 {
     public class TestCharacters : MonoBehaviour
     {
+        public TMP_FontAsset tempFont;
         // Start is called before the first frame update
         void Start()
         {
@@ -31,6 +33,14 @@ namespace TESTING
                 "And a last one."
             };
             yield return Elen.Say(lines);
+
+            Elen.SetNameColor(Color.red);
+            Elen.SetDialogueColor(Color.green);
+            Elen.SetNameFont(tempFont);
+            Elen.SetDialogueFont(tempFont);
+
+            yield return Elen.Say(lines);
+
 
             lines = new List<string>()
             {

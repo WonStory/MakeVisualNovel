@@ -59,6 +59,7 @@ namespace DIALOGUE
                 if (line.hasDialogue)
                 {
                     yield return Line_RunDialogue(line);
+                    //yield return WaitForUserInput(); //이게 대화마다 잠시 멈추게 해줌.
                 }
 
                 //run any command

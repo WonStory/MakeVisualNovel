@@ -3374,6 +3374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a047ced260230d945b14d05a5ee46534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tempFont: {fileID: 11400000, guid: 0340f504be5db4a41bbbd7d8c1ed52f6, type: 2}
 --- !u!1 &2007083943
 GameObject:
   m_ObjectHideFlags: 0
