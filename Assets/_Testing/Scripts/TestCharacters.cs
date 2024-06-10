@@ -14,7 +14,7 @@ namespace TESTING
         void Start()
         {
             // Character Elen = CharacterManager.instance.CreateCharacter("Elen");
-            // Character Stella = CharacterManager.instance.CreateCharacter("Stella");
+            //Character Fs2 = CharacterManager.instance.CreateCharacter("Raelin");
             // Character Stella2 = CharacterManager.instance.CreateCharacter("Stella");
             // Character Adam = CharacterManager.instance.CreateCharacter("Adam");
             StartCoroutine(Test());
@@ -22,6 +22,21 @@ namespace TESTING
 
         IEnumerator Test()
         {
+            yield return new WaitForSeconds(1f);
+
+            Character stella = CharacterManager.instance.CreateCharacter("Stella");
+
+            yield return new WaitForSeconds(1f);
+
+            yield return stella.Hide();
+
+            yield return new WaitForSeconds(0.5f);
+
+            yield return stella.Show();
+
+            yield return stella.Say("Hello!");
+
+            /*
             Character Elen = CharacterManager.instance.CreateCharacter("Elen");
             Character Adam = CharacterManager.instance.CreateCharacter("Adam");
             Character Ben = CharacterManager.instance.CreateCharacter("Benjamin");
@@ -51,6 +66,7 @@ namespace TESTING
             yield return Ben.Say("fuck");
 
             Debug.Log("Finished");
+            */
         }
 
 

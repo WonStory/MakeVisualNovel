@@ -13,6 +13,13 @@ namespace CHARACTERS
 
         private CharacterConfigSO config => DialogueSystem.instance.config.characterConfigurationAsset;
 
+        private const string CHARACTER_NAME_ID = "<charname>";
+        private string characterRootPath => $"Characters/{CHARACTER_NAME_ID}";
+        private string characterPrefabPath => $"{characterRootPath}/Character - [{CHARACTER_NAME_ID}]";//prefab의 이름을 경로안에서 찾아서 호출한다.
+
+        [SerializeField] private RectTransform _characterpanel = null;
+        public RectTransform characterPanel => _characterpanel;
+
         private void Awake()
         {
             instance = this;
@@ -63,13 +70,44 @@ namespace CHARACTERS
 
             result.config = config.GetConfig(characterName);
 
+            result.prefab = GetPrefabForCharacter(characterName); //정보에 프리팯도 포함
+
             return result;
         }
+
+        private GameObject GetPrefabForCharacter(string characterName)
+        {
+            string prefabPath = FormatCharacterPath(characterPrefabPath, characterName);
+            return Resources.Load<GameObject>(prefabPath);
+        }
+
+        private string FormatCharacterPath(string path, string characterName) => path.Replace(CHARACTER_NAME_ID, characterName);
 
         private Character CreateCharacterFromInfo(CHARACTER_INFO Info)
         {
             CharacterConfigData config = Info.config;
 
+            switch (config.characterType)
+            {
+                case Character.CharacterType.Text:
+                    return new Character_Text(Info.name, config, Info.prefab);
+
+                case Character.CharacterType.Sprite:
+                case Character.CharacterType.SpriteSheet:
+                    return new Character_Sprite(Info.name, config, Info.prefab);
+
+                case Character.CharacterType.Live2D:
+                    return new Character_Live2D(Info.name, config, Info.prefab);
+
+                case Character.CharacterType.Model3D:
+                    return new Character_Model3D(Info.name, config, Info.prefab);
+
+                default:
+                    return null;
+            }
+
+
+/*
             if (config.characterType == Character.CharacterType.Text)
             {
                 return new Character_Text(Info.name, config); //config를 넣음으로써 이름과 고유한 데이터가 들어간다.
@@ -88,6 +126,7 @@ namespace CHARACTERS
             }
 
             return null;
+            */
         }
 
 
@@ -97,6 +136,8 @@ namespace CHARACTERS
             public string name = "";
 
             public CharacterConfigData config = null;
+
+            public GameObject prefab = null;//정보를 받을 때 프리팯도 받아서 미리 만들어둔걸 바로 불러올 수 있게.
         }
 
 
