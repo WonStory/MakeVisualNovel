@@ -13,6 +13,7 @@ namespace CHARACTERS
 
         private CharacterConfigSO config => DialogueSystem.instance.config.characterConfigurationAsset;
 
+        private const string CHARACTER_CASTING_ID = " as ";
         private const string CHARACTER_NAME_ID = "<charname>";
         private string characterRootPath => $"Characters/{CHARACTER_NAME_ID}";
         private string characterPrefabPath => $"{characterRootPath}/Character - [{CHARACTER_NAME_ID}]";//prefab의 이름을 경로안에서 찾아서 호출한다.
@@ -66,11 +67,13 @@ namespace CHARACTERS
         {
             CHARACTER_INFO result = new CHARACTER_INFO();
 
-            result.name = characterName;
+            string[] nameData = characterName.Split(CHARACTER_CASTING_ID, System.StringSplitOptions.RemoveEmptyEntries);//캐스팅 아이디로 분할한 다음 빈칸없애고 저장
+            result.name = nameData[0];
+            result.castingName = nameData.Length > 1 ? nameData[1] : result.name;//캐스팅 네임이 진짜라고 보면 편함. 없다면 원래 있는게 진짜이름
 
-            result.config = config.GetConfig(characterName);
+            result.config = config.GetConfig(result.castingName);
 
-            result.prefab = GetPrefabForCharacter(characterName); //정보에 프리팯도 포함
+            result.prefab = GetPrefabForCharacter(result.castingName); //정보에 프리팯도 포함
 
             return result;
         }
@@ -134,6 +137,7 @@ namespace CHARACTERS
         private class CHARACTER_INFO //비공개 클래스 내부에 저장해둔다.
         {
             public string name = "";
+            public string castingName = "";
 
             public CharacterConfigData config = null;
 

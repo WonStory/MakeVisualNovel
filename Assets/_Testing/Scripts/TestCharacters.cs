@@ -10,6 +10,9 @@ namespace TESTING
     public class TestCharacters : MonoBehaviour
     {
         public TMP_FontAsset tempFont;
+
+        private Character CreateCharacter(string name) => CharacterManager.instance.CreateCharacter(name);
+
         // Start is called before the first frame update
         void Start()
         {
@@ -22,20 +25,15 @@ namespace TESTING
 
         IEnumerator Test()
         {
-            yield return new WaitForSeconds(1f);
+            Character guard1 = CreateCharacter("Guard1 as Generic");
+            Character guard2 = CreateCharacter("Guard2 as Generic");
+            Character guard3 = CreateCharacter("Guard3 as Generic");
 
-            Character stella = CharacterManager.instance.CreateCharacter("Stella");
+            guard1.Show();
+            guard2.Show();
+            guard3.Show();
 
-            yield return new WaitForSeconds(1f);
-
-            yield return stella.Hide();
-
-            yield return new WaitForSeconds(0.5f);
-
-            yield return stella.Show();
-
-            yield return stella.Say("Hello!");
-
+            yield return null;
             /*
             Character Elen = CharacterManager.instance.CreateCharacter("Elen");
             Character Adam = CharacterManager.instance.CreateCharacter("Adam");
