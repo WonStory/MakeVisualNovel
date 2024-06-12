@@ -15,8 +15,9 @@ namespace CHARACTERS
 
         private const string CHARACTER_CASTING_ID = " as ";
         private const string CHARACTER_NAME_ID = "<charname>";
-        private string characterRootPath => $"Characters/{CHARACTER_NAME_ID}";
-        private string characterPrefabPath => $"{characterRootPath}/Character - [{CHARACTER_NAME_ID}]";//prefab의 이름을 경로안에서 찾아서 호출한다.
+        public string characterRootPathFormat => $"Characters/{CHARACTER_NAME_ID}";
+        public string characterPrefabNameFormat => $"Character - [{CHARACTER_NAME_ID}]"; //향후 경로를 찾아야될 때를 위해 public
+        public string characterPrefabPathFormat => $"{characterRootPathFormat}/{characterPrefabNameFormat}";//prefab의 이름을 경로안에서 찾아서 호출한다.
 
         [SerializeField] private RectTransform _characterpanel = null;
         public RectTransform characterPanel => _characterpanel;
@@ -80,11 +81,11 @@ namespace CHARACTERS
 
         private GameObject GetPrefabForCharacter(string characterName)
         {
-            string prefabPath = FormatCharacterPath(characterPrefabPath, characterName);
+            string prefabPath = FormatCharacterPath(characterPrefabPathFormat, characterName);
             return Resources.Load<GameObject>(prefabPath);
         }
 
-        private string FormatCharacterPath(string path, string characterName) => path.Replace(CHARACTER_NAME_ID, characterName);
+        public string FormatCharacterPath(string path, string characterName) => path.Replace(CHARACTER_NAME_ID, characterName);
 
         private Character CreateCharacterFromInfo(CHARACTER_INFO Info)
         {

@@ -36,6 +36,7 @@ namespace CHARACTERS
             if (prefab != null)
             {
                 GameObject ob = Object.Instantiate(prefab, manager.characterPanel);
+                ob.name = manager.FormatCharacterPath(manager.characterPrefabNameFormat, name);//리네이밍하는단계, 하지만 두번 이름을 참조하므로 안좋다.
                 ob.SetActive(true);
                 root = ob.GetComponent<RectTransform>();
                 animator = root.GetComponentInChildren<Animator>();//애니메이션 구성요소를 할당하고 가져옴
