@@ -21,8 +21,10 @@ namespace CHARACTERS
 
         private Coroutine co_transitioningLayer = null; //장면을 스킾할때마다 코루틴을 계속 실행하면 최악이므로 너무 많은 코루틴을 건너뛰지 않도록한다.
         private Coroutine co_levelingAlpha = null;
+        private Coroutine co_changingColor = null;
         public bool isTransitioningLayer => co_transitioningLayer != null;
         public bool isLevelingAlpha => co_levelingAlpha != null;
+        public bool isChangingColor => co_changingColor != null;
 
         public CharacterSpriteLayer (Image defaultRenderer, int layer = 0) //캐릭터에 대한 각레이어를 추가하기 쉽게 생성자를 만듬
         {
@@ -113,6 +115,57 @@ namespace CHARACTERS
             }
 
             co_levelingAlpha = null; //코루틴이 종료되었음을 레이어전환에 널을 할당함으로써 함.
+        }
+
+
+        public void SetColor(Color color)
+        {
+            renderer.color = color;
+
+            foreach (CanvasGroup oldCG in oldRenderers)
+            {
+                oldCG.GetComponent<Image>().color = color;
+            }
+        }
+
+        public Coroutine TransitionColor(Color color, float speed)
+        {
+            if (isChangingColor)
+            {
+                characterManager.StopCoroutine(co_changingColor);
+            }
+
+            co_changingColor = characterManager.StartCoroutine(ChangingColor(color, speed));
+
+            return co_changingColor;
+        }
+
+        private IEnumerator ChangingColor(Color color, float speedMultiplier) //점진적으로 색상을 바꾸는 과정
+        {
+            Color oldColor = renderer.color;
+            List<Image> oldImages = new List<Image>();
+
+            foreach (var oldCG in oldRenderers)
+            {
+                oldImages.Add(oldCG.GetComponent<Image>());
+            }
+
+            float colorPercent = 0;
+            while (colorPercent < 1)
+            {
+                colorPercent += DEFAULT_TRANSITION_SPEED * speedMultiplier * Time.deltaTime;
+
+                renderer.color = Color.Lerp(oldColor, color, colorPercent);
+
+                foreach (Image oldImage in oldImages)
+                {
+                    oldImage.color = renderer.color;
+                }
+
+                yield return null;
+            }
+
+            co_changingColor = null;
         }
 
 

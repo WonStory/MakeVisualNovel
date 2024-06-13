@@ -16,17 +16,22 @@ namespace CHARACTERS
         public RectTransform root = null; //각 캐릭터마다 다른 특징을 보유해야된다.
         public CharacterConfigData config; //구성하는 데이터가 여기에 저장시키고 방출시킴
         public Animator animator;
+        public Color color { get; protected set; } = Color.white;
 
-        protected CharacterManager manager => CharacterManager.instance; //꽤 많이 참조할 것이므로 바로가기를 만들어준다.
+        protected CharacterManager CharacterManager => CharacterManager.instance; //꽤 많이 참조할 것이므로 바로가기를 만들어준다.
 
         public DialogueSystem dialogueSystem => DialogueSystem.instance;
 
         //코루틴, 프로텍트는 상속받은 곳에만 쓰임
         protected Coroutine co_revealing, co_hiding;
         protected Coroutine co_moving;
+        protected Coroutine co_changeingColor;
+
         public bool isReaveling => co_revealing != null;
         public bool isHiding => co_hiding != null;
         public bool isMoving => co_moving != null;
+        public bool isChangingColor => co_changeingColor != null;
+
         public virtual bool isVisible { get; set; }
 
         public Character(string name, CharacterConfigData config, GameObject prefab)
@@ -37,8 +42,8 @@ namespace CHARACTERS
 
             if (prefab != null)
             {
-                GameObject ob = Object.Instantiate(prefab, manager.characterPanel);
-                ob.name = manager.FormatCharacterPath(manager.characterPrefabNameFormat, name);//리네이밍하는단계, 하지만 두번 이름을 참조하므로 안좋다.
+                GameObject ob = Object.Instantiate(prefab, CharacterManager.characterPanel);
+                ob.name = CharacterManager.FormatCharacterPath(CharacterManager.characterPrefabNameFormat, name);//리네이밍하는단계, 하지만 두번 이름을 참조하므로 안좋다.
                 ob.SetActive(true);
                 root = ob.GetComponent<RectTransform>();
                 animator = root.GetComponentInChildren<Animator>();//애니메이션 구성요소를 할당하고 가져옴
@@ -70,10 +75,10 @@ namespace CHARACTERS
 
             if (isHiding)
             {
-                manager.StopCoroutine(co_hiding);
+                CharacterManager.StopCoroutine(co_hiding);
             }
 
-            co_revealing = manager.StartCoroutine(ShowingOrHiding(true));
+            co_revealing = CharacterManager.StartCoroutine(ShowingOrHiding(true));
 
             return co_revealing;
         }
@@ -86,10 +91,10 @@ namespace CHARACTERS
             }
             if (isReaveling)
             {
-                manager.StopCoroutine(co_revealing);
+                CharacterManager.StopCoroutine(co_revealing);
             }
 
-            co_hiding = manager.StartCoroutine(ShowingOrHiding(false));
+            co_hiding = CharacterManager.StartCoroutine(ShowingOrHiding(false));
 
             return co_hiding;
         }
@@ -123,10 +128,10 @@ namespace CHARACTERS
 
             if (isMoving)//위치이동을 할 때 움직이고 있나를 판단하고 코루틴을 중지시킴
             {
-                manager.StopCoroutine(co_moving);
+                CharacterManager.StopCoroutine(co_moving);
             }
 
-            co_moving = manager.StartCoroutine(MovingToPosition(position, speed, smooth));
+            co_moving = CharacterManager.StartCoroutine(MovingToPosition(position, speed, smooth));
 
             return co_moving;
         } 
@@ -172,6 +177,32 @@ namespace CHARACTERS
             Vector2 maxAnchorTarget = minAnchorTarget + padding; // 캐릭터 크기에 따라 이동
 
             return (minAnchorTarget, maxAnchorTarget);
+        }
+
+        public virtual void SetColor(Color color)
+        {
+            this.color = color;
+        }
+
+        public Coroutine TransitionColor(Color color, float speed = 1f)
+        {
+            this.color = color;
+
+            if (isChangingColor)
+            {
+                CharacterManager.StopCoroutine(co_changeingColor);
+            }
+
+            co_changeingColor = CharacterManager.StartCoroutine(ChangingColor(color, speed));
+
+            return co_changeingColor;
+
+        }
+
+        public virtual IEnumerator ChangingColor(Color color, float speed)
+        {
+            Debug.Log("Color changing is not applicable on this character type!");
+            yield return null;
         }
 
         public enum CharacterType

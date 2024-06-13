@@ -31,6 +31,14 @@ namespace TESTING
 
             //Guard.Show();
 
+            yield return Raelin.TransitionColor(Color.red);
+            yield return Raelin.TransitionColor(Color.blue);
+            yield return Raelin.TransitionColor(Color.black);
+            yield return Raelin.TransitionColor(Color.white);
+
+
+
+/*
             yield return new WaitForSeconds(1);
 
             Sprite body = Raelin.GetSprite("Raelin_2");
@@ -46,7 +54,7 @@ namespace TESTING
             Debug.Log($"{Raelin.isVisible}");
 
             yield return null;
-            
+            */
             /*
             Character Elen = CharacterManager.instance.CreateCharacter("Elen");
             Character Adam = CharacterManager.instance.CreateCharacter("Adam");
