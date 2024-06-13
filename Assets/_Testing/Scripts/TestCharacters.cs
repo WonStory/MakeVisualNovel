@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using CHARACTERS;
 using DIALOGUE;
@@ -26,22 +25,28 @@ namespace TESTING
         IEnumerator Test()
         {
             
-            Character guard1 = CreateCharacter("Guard1 as Generic");
-            Character guard2 = CreateCharacter("Guard2 as Generic");
-            Character guard3 = CreateCharacter("Guard3 as Generic");
+            //Character_Sprite Guard = CreateCharacter("Guard as Generic") as Character_Sprite;
+            //Character_Sprite Stella = CreateCharacter("Stella") as Character_Sprite;
+            Character_Sprite Raelin = CreateCharacter("Raelin") as Character_Sprite;
 
-            guard1.SetPosition(Vector2.zero);
-            guard2.SetPosition(new Vector2(0.5f, 0.5f));
-            guard3.SetPosition(Vector2.one);
+            //Guard.Show();
 
-            guard2.Show();
-            guard3.Show();
-            yield return guard1.Show();
+            yield return new WaitForSeconds(1);
 
-            yield return guard1.MoveToPosition(Vector2.one,  smooth: true);
-            yield return guard1.MoveToPosition(Vector2.zero,  smooth: true);
+            Sprite body = Raelin.GetSprite("Raelin_2");
+            Sprite face = Raelin.GetSprite("Raelin_4");
+            
+            Raelin.TransitionSprite(body);
+            yield return  Raelin.TransitionSprite(face, 1);
+
+            yield return new WaitForSeconds(1);
+
+            yield return Raelin.TransitionSprite(Raelin.GetSprite("Raelin_10"), 1);
+
+            Debug.Log($"{Raelin.isVisible}");
 
             yield return null;
+            
             /*
             Character Elen = CharacterManager.instance.CreateCharacter("Elen");
             Character Adam = CharacterManager.instance.CreateCharacter("Adam");

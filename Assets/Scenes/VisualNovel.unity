@@ -3668,6 +3668,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character - [Female Student 2]
       objectReference: {fileID: 0}
+    - target: {fileID: 1601824056369540066, guid: 5baaf8ed1ded15a4982389b6a9bad9e7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1786768928655793762, guid: 5baaf8ed1ded15a4982389b6a9bad9e7,
         type: 3}
       propertyPath: m_Pivot.x

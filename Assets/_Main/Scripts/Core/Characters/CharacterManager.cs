@@ -76,6 +76,8 @@ namespace CHARACTERS
 
             result.prefab = GetPrefabForCharacter(result.castingName); //정보에 프리팯도 포함
 
+            result.rootCharacterFolder = FormatCharacterPath(characterRootPathFormat, result.castingName);
+
             return result;
         }
 
@@ -94,17 +96,17 @@ namespace CHARACTERS
             switch (config.characterType)
             {
                 case Character.CharacterType.Text:
-                    return new Character_Text(Info.name, config, Info.prefab);
+                    return new Character_Text(Info.name, config, Info.prefab, Info.rootCharacterFolder);
 
                 case Character.CharacterType.Sprite:
                 case Character.CharacterType.SpriteSheet:
-                    return new Character_Sprite(Info.name, config, Info.prefab);
+                    return new Character_Sprite(Info.name, config, Info.prefab, Info.rootCharacterFolder);
 
                 case Character.CharacterType.Live2D:
-                    return new Character_Live2D(Info.name, config, Info.prefab);
+                    return new Character_Live2D(Info.name, config, Info.prefab, Info.rootCharacterFolder);
 
                 case Character.CharacterType.Model3D:
-                    return new Character_Model3D(Info.name, config, Info.prefab);
+                    return new Character_Model3D(Info.name, config, Info.prefab, Info.rootCharacterFolder);
 
                 default:
                     return null;
@@ -139,6 +141,8 @@ namespace CHARACTERS
         {
             public string name = "";
             public string castingName = "";
+
+            public string rootCharacterFolder = ""; //경로를 이용하고 바로 버릴빠엔 저장한다음 불러와서 이미지 적용에도 수월하게 한다.
 
             public CharacterConfigData config = null;
 

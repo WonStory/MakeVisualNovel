@@ -9,6 +9,8 @@ namespace CHARACTERS
 {
     public abstract class Character
     {
+        public const bool ENABLE_ON_START = true;
+        
         public string name = "";
         public string displayname = "";
         public RectTransform root = null; //각 캐릭터마다 다른 특징을 보유해야된다.
@@ -25,7 +27,7 @@ namespace CHARACTERS
         public bool isReaveling => co_revealing != null;
         public bool isHiding => co_hiding != null;
         public bool isMoving => co_moving != null;
-        public virtual bool isVisible => false;
+        public virtual bool isVisible { get; set; }
 
         public Character(string name, CharacterConfigData config, GameObject prefab)
         {
@@ -134,7 +136,7 @@ namespace CHARACTERS
             (Vector2 minAnchorTarget, Vector2 maxAnchorTarget) = ConvertUITargetPosionToRelativeCharacterAnchorTargets(position);
             Vector2 padding = root.anchorMax - root.anchorMin;
 
-            float t = 1f / 20f;// 원본은 t를 speed * deltatime으로 고치면댐.
+            float t = 1f / 20f;// 원본은 t를 speed * deltatime으로 고치면댐. 혹은 vector2.smoothdamp를 써볼 것.
             t = t*t*(3f - 2f *t);
 
             while (root.anchorMin != minAnchorTarget || root.anchorMax != maxAnchorTarget)
