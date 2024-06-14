@@ -140,6 +140,18 @@ namespace CHARACTERS
             return co_changingColor;
         }
 
+        public void StopChangingColor()
+        {
+            if (!isChangingColor)
+            {
+                return;
+            }
+
+            characterManager.StopCoroutine(co_changingColor);
+
+            co_changingColor = null;
+        }
+
         private IEnumerator ChangingColor(Color color, float speedMultiplier) //점진적으로 색상을 바꾸는 과정
         {
             Color oldColor = renderer.color;
@@ -165,7 +177,7 @@ namespace CHARACTERS
                 yield return null;
             }
 
-            co_changingColor = null;
+            co_changingColor = null; //다끝나면 색상변경이 널과 같다고 한다.
         }
 
 

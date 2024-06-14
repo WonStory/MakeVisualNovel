@@ -26,16 +26,36 @@ namespace TESTING
         {
             
             //Character_Sprite Guard = CreateCharacter("Guard as Generic") as Character_Sprite;
-            //Character_Sprite Stella = CreateCharacter("Stella") as Character_Sprite;
             Character_Sprite Raelin = CreateCharacter("Raelin") as Character_Sprite;
+            Character_Sprite Stella = CreateCharacter("Stella") as Character_Sprite;
+        
 
             //Guard.Show();
+            Stella.SetPosition(new Vector2(1, 0));
+            Raelin.SetPosition(Vector2.zero);
+            
 
-            yield return Raelin.TransitionColor(Color.red);
-            yield return Raelin.TransitionColor(Color.blue);
-            yield return Raelin.TransitionColor(Color.black);
-            yield return Raelin.TransitionColor(Color.white);
+            Stella.UnHighlight();
+            yield return Raelin.Say("hello.");
 
+            Raelin.UnHighlight();
+            Stella.Highlight();
+            yield return Stella.Say("hello. too");
+
+            Raelin.Highlight();
+            Stella.UnHighlight();
+            yield return Raelin.Say("hello. too too");
+
+            Raelin.UnHighlight();
+            Stella.Highlight();
+            yield return Stella.Say("hello. too too too");
+
+            Raelin.Highlight();
+            Stella.UnHighlight();
+            Raelin.TransitionSprite(Raelin.GetSprite("Raelin_9"), layer: 1);
+            yield return Raelin.Say("yas baby");
+
+            yield return null;
 
 
 /*

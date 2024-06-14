@@ -13,6 +13,7 @@ namespace CHARACTERS
         private const string SPRITESHEET_DEFAULT_SHEETNAME = "Default";
         private const char SPRITESHEET_TEX_SPRITE_DELIMITTER = '-';
         private CanvasGroup rootCG => root.GetComponent<CanvasGroup>();
+        
 
         public List<CharacterSpriteLayer> layers = new List<CharacterSpriteLayer>();
 
@@ -27,7 +28,8 @@ namespace CHARACTERS
         {
             rootCG.alpha = ENABLE_ON_START ? 1 : 0; //show()를 쓰면 강제로 보이므로 같이 쓸 때 주의
             artAssetsDirectory = rootAssetFolder + "/Images";
-            
+
+
             GetLayers();
 
             Debug.Log($"Created Sprite Character: '{name}, {prefab}, {artAssetsDirectory}, {rootCG.alpha}'");
@@ -41,10 +43,13 @@ namespace CHARACTERS
             {
                 return;
             }
+            
 
             for (int i = 0; i < rendererRoot.transform.childCount; i++) //반복해서 하위요소를 다 찾는다.
             {
                 Transform child = rendererRoot.transform.GetChild(i);
+
+                
 
                 Image rendererImage = child.GetComponentInChildren<Image>(); //레이어를 강제로 지정해줫으므로(안그러면 페이스와 몸의 순서가 바꼈을 때 페이스가 몸에 가려진다.)
 
@@ -128,8 +133,11 @@ namespace CHARACTERS
         {
             base.SetColor(color);
 
+            color = displayColor;
+
             foreach (CharacterSpriteLayer layer in layers)
             {
+                layer.StopChangingColor(); //현재 변경중인걸 취소하고 즉시 셋컬러함
                 layer.SetColor(color);
             }
         }
@@ -149,6 +157,25 @@ namespace CHARACTERS
             }
 
             co_changeingColor = null;
+        }
+
+        public override IEnumerator Highlighting(bool highlight, float speedMultiplier)
+        {
+            Color targetColor = displayColor;
+
+            foreach (CharacterSpriteLayer layer in layers)
+            {
+                layer.TransitionColor(targetColor, speedMultiplier);
+            }
+
+            yield return null;
+
+            while (layers.Any(l => l.isChangingColor))
+            {
+                yield return null;
+            }
+
+            co_highlighting = null; //될때까지 기다렸다가 널로 바꿈
         }
     }
 }

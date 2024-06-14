@@ -10,13 +10,18 @@ namespace CHARACTERS
     public abstract class Character
     {
         public const bool ENABLE_ON_START = true;
+        private const float UNHIGHLIGHTED_DARKEN_STENGTH = 0.65F;
         
         public string name = "";
         public string displayname = "";
         public RectTransform root = null; //각 캐릭터마다 다른 특징을 보유해야된다.
         public CharacterConfigData config; //구성하는 데이터가 여기에 저장시키고 방출시킴
         public Animator animator;
-        public Color color { get; protected set; } = Color.white;
+        public Color color { get; protected set; } = Color.white; //현재 할당된 컬러
+        public Color displayColor => highlighted ? highlightedColor : unhighlightedColor;
+        protected Color highlightedColor => color;
+        protected Color unhighlightedColor => new Color(color.r * UNHIGHLIGHTED_DARKEN_STENGTH, color.g * UNHIGHLIGHTED_DARKEN_STENGTH, color.b * UNHIGHLIGHTED_DARKEN_STENGTH, color.a);
+        public bool highlighted { get; protected set; } = true;
 
         protected CharacterManager CharacterManager => CharacterManager.instance; //꽤 많이 참조할 것이므로 바로가기를 만들어준다.
 
@@ -26,11 +31,14 @@ namespace CHARACTERS
         protected Coroutine co_revealing, co_hiding;
         protected Coroutine co_moving;
         protected Coroutine co_changeingColor;
+        protected Coroutine co_highlighting;
 
         public bool isReaveling => co_revealing != null;
         public bool isHiding => co_hiding != null;
         public bool isMoving => co_moving != null;
         public bool isChangingColor => co_changeingColor != null;
+        public bool isHighlighting => (highlighted && co_highlighting != null);
+        public bool isUnHighlighting => (!highlighted && co_highlighting != null);
 
         public virtual bool isVisible { get; set; }
 
@@ -193,7 +201,7 @@ namespace CHARACTERS
                 CharacterManager.StopCoroutine(co_changeingColor);
             }
 
-            co_changeingColor = CharacterManager.StartCoroutine(ChangingColor(color, speed));
+            co_changeingColor = CharacterManager.StartCoroutine(ChangingColor(displayColor, speed));
 
             return co_changeingColor;
 
@@ -202,6 +210,47 @@ namespace CHARACTERS
         public virtual IEnumerator ChangingColor(Color color, float speed)
         {
             Debug.Log("Color changing is not applicable on this character type!");
+            yield return null;
+        }
+
+        public Coroutine Highlight(float speed = 1f)
+        {
+            if (isHighlighting)
+            {
+                return co_highlighting;
+            }
+
+            if (isUnHighlighting)
+            {
+                CharacterManager.StopCoroutine(co_highlighting);
+            }
+
+            highlighted = true;
+            co_highlighting = CharacterManager.StartCoroutine(Highlighting(highlighted, speed));
+
+            return co_highlighting;
+        }
+
+        public Coroutine UnHighlight(float speed = 1f)
+        {
+            if (isUnHighlighting)
+            {
+                return co_highlighting;
+            }
+
+            if (isHighlighting)
+            {
+                CharacterManager.StopCoroutine(co_highlighting);
+            }
+            highlighted = false;
+            co_highlighting = CharacterManager.StartCoroutine(Highlighting(highlighted, speed));
+
+            return co_highlighting;
+        }
+
+        public virtual IEnumerator Highlighting(bool highlight, float speedMultiplier)
+        {
+            Debug.Log("Highlighting is not available on this character type!");
             yield return null;
         }
 

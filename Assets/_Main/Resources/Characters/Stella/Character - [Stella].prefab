@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 877658820, guid: 418997cd131ebf84fac6b738543fe03f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 39766251264d72641b10595843c5f2d6, type: 2}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -98,7 +98,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6253074452906218297}
   m_Layer: 0
-  m_Name: Layer 1
+  m_Name: 'Layer: 1'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1380639286023155001
 RectTransform:
   m_ObjectHideFlags: 0
@@ -241,14 +241,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
+  m_Color: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -984643779, guid: 418997cd131ebf84fac6b738543fe03f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 442cfcf15f888d44896eab4b10f1ba7e, type: 2}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -280,6 +280,7 @@ GameObject:
   m_Component:
   - component: {fileID: 210421926265621815}
   - component: {fileID: 761304020751716841}
+  - component: {fileID: 8254422694944726295}
   m_Layer: 0
   m_Name: Anim
   m_TagString: Untagged
@@ -315,6 +316,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5623188291585981112}
   m_CullTransparentMesh: 1
+--- !u!95 &8254422694944726295
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5623188291585981112}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7536682438771488279
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,7 +347,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3447350146936224202}
   m_Layer: 0
-  m_Name: Layer 0
+  m_Name: 'Layer: 0'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
