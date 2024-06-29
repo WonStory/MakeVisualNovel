@@ -33,7 +33,14 @@ namespace TESTING
             //Guard.Show();
             Stella.SetPosition(new Vector2(1, 0));
             Raelin.SetPosition(Vector2.zero);
-            
+
+            yield return new WaitForSeconds(1);
+
+            yield return Raelin.Flip(0.3f);
+
+            yield return Stella.FaceRight(immediate: true);
+
+            yield return Raelin.FaceLeft(immediate: true);
 
             Stella.UnHighlight();
             yield return Raelin.Say("hello.");

@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 namespace CHARACTERS
 {
     public class CharacterSpriteLayer
@@ -22,9 +23,12 @@ namespace CHARACTERS
         private Coroutine co_transitioningLayer = null; //장면을 스킾할때마다 코루틴을 계속 실행하면 최악이므로 너무 많은 코루틴을 건너뛰지 않도록한다.
         private Coroutine co_levelingAlpha = null;
         private Coroutine co_changingColor = null;
+        private Coroutine co_flipping = null;
+        private bool isFacingLeft = Character.DEFALUT_ORIENTATION_IS_FACING_LEFT;
         public bool isTransitioningLayer => co_transitioningLayer != null;
         public bool isLevelingAlpha => co_levelingAlpha != null;
         public bool isChangingColor => co_changingColor != null;
+        public bool isFlipping => co_flipping != null;
 
         public CharacterSpriteLayer (Image defaultRenderer, int layer = 0) //캐릭터에 대한 각레이어를 추가하기 쉽게 생성자를 만듬
         {
@@ -180,6 +184,70 @@ namespace CHARACTERS
             co_changingColor = null; //다끝나면 색상변경이 널과 같다고 한다.
         }
 
+        public Coroutine FaceLeft(float speed = 1, bool immediate = false)
+        {
+            if (isFlipping)
+            {
+                characterManager.StopCoroutine(co_flipping);
+            }
+
+            isFacingLeft = true;
+            co_flipping = characterManager.StartCoroutine(FaceDirection(isFacingLeft, speed, immediate));
+
+            return co_flipping;
+        }
+
+        public Coroutine Flip(float speed = 1, bool immediate = false)
+        {
+            if (isFacingLeft)
+            {
+                return FaceRight(speed, immediate);
+            }
+            else
+            {
+                return FaceLeft(speed, immediate);
+            }
+        }
+
+        public Coroutine FaceRight(float speed = 1, bool immediate = false)
+        {
+            if (isFlipping)
+            {
+                characterManager.StopCoroutine(co_flipping);
+            }
+
+            isFacingLeft = false;
+            co_flipping = characterManager.StartCoroutine(FaceDirection(isFacingLeft, speed, immediate));
+
+            return co_flipping;
+        }
+
+        private IEnumerator FaceDirection(bool faceLeft, float speedMultiplier, bool immediate)
+        {
+            float xScale = faceLeft ? 1 : -1;
+            Vector3 newScale = new Vector3(xScale, 1, 1);
+
+            if (!immediate) //즉각적이지 않으므로 알파도를 건드려서 천천히 바꾸게함
+            {
+                Image newRenderer = CreateRenderer(renderer.transform.parent);
+
+                newRenderer.transform.localScale = newScale;
+
+                transitionSpeedMultiplier = speedMultiplier;
+                TryStartLevelingAlphas();
+
+                while (isLevelingAlpha)
+                {
+                    yield return null;
+                }
+            }
+            else
+            {
+                renderer.transform.localScale = newScale;
+            }
+
+            co_flipping = null;
+        }
 
     }
 

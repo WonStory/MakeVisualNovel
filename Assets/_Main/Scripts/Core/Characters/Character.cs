@@ -11,6 +11,7 @@ namespace CHARACTERS
     {
         public const bool ENABLE_ON_START = true;
         private const float UNHIGHLIGHTED_DARKEN_STENGTH = 0.65F;
+        public const bool DEFALUT_ORIENTATION_IS_FACING_LEFT = true; //기본방향을 정의하고 싶다. character_sprite에서 호출 가능하도록 pubic을 달아준다.
         
         public string name = "";
         public string displayname = "";
@@ -22,6 +23,7 @@ namespace CHARACTERS
         protected Color highlightedColor => color;
         protected Color unhighlightedColor => new Color(color.r * UNHIGHLIGHTED_DARKEN_STENGTH, color.g * UNHIGHLIGHTED_DARKEN_STENGTH, color.b * UNHIGHLIGHTED_DARKEN_STENGTH, color.a);
         public bool highlighted { get; protected set; } = true;
+        protected bool facingLeft = DEFALUT_ORIENTATION_IS_FACING_LEFT; //왼쪽으로 향하는 불을 만듬 조작하거나 엑세스말곤 건들기 싫어서 프로텍트
 
         protected CharacterManager CharacterManager => CharacterManager.instance; //꽤 많이 참조할 것이므로 바로가기를 만들어준다.
 
@@ -32,6 +34,7 @@ namespace CHARACTERS
         protected Coroutine co_moving;
         protected Coroutine co_changeingColor;
         protected Coroutine co_highlighting;
+        protected Coroutine co_flipping;
 
         public bool isReaveling => co_revealing != null;
         public bool isHiding => co_hiding != null;
@@ -41,6 +44,9 @@ namespace CHARACTERS
         public bool isUnHighlighting => (!highlighted && co_highlighting != null);
 
         public virtual bool isVisible { get; set; }
+        public bool isFacingLeft => facingLeft;
+        public bool isFacingRight => !facingLeft;
+        public bool isFlipping => co_flipping != null;
 
         public Character(string name, CharacterConfigData config, GameObject prefab)
         {
@@ -251,6 +257,50 @@ namespace CHARACTERS
         public virtual IEnumerator Highlighting(bool highlight, float speedMultiplier)
         {
             Debug.Log("Highlighting is not available on this character type!");
+            yield return null;
+        }
+
+        public Coroutine Flip(float speed = 1, bool immediate = false)
+        {
+            if (isFacingLeft)
+            {
+                return FaceRight();
+            }
+            else
+            {
+                return FaceLeft();
+            }
+        }
+
+        public Coroutine FaceLeft(float speed = 1, bool immediate = false) //새로운 이미지가 얼마나 빨리 들어오는지 스피드, 즉각적인 효과로 적용할건지의 immediate, 직면하는 경우 써야된다.
+        {
+            if (isFlipping)
+            {
+                CharacterManager.StopCoroutine(co_flipping);
+            }
+
+            facingLeft = true;
+            co_flipping = CharacterManager.StartCoroutine(FaceDirection(facingLeft, speed, immediate));
+
+            return co_flipping;
+        }
+
+        public Coroutine FaceRight(float speed = 1, bool immediate = false)
+        {
+            if (isFlipping)
+            {
+                CharacterManager.StopCoroutine(co_flipping);
+            }
+
+            facingLeft = false;
+            co_flipping = CharacterManager.StartCoroutine(FaceDirection(facingLeft, speed, immediate));
+
+            return co_flipping;
+        }
+
+        public virtual IEnumerator FaceDirection(bool faceLeft, float speedMultiplier, bool immediate)
+        {
+            Debug.Log("Cannot flip a character of this type!");
             yield return null;
         }
 
