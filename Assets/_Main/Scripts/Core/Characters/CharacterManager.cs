@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DIALOGUE;
 using UnityEngine;
 
@@ -133,6 +134,26 @@ namespace CHARACTERS
 
             return null;
             */
+        }
+
+        public void SortCharacters()
+        {
+            List<Character> activeCharacters = characters.Values.Where(c => c.root.gameObject.activeInHierarchy && c.isVisible).ToList(); //보이면서 활성화된 개체만 가져옴
+            List<Character> inactiveCharacters = characters.Values.Except(activeCharacters).ToList(); //액티브 캐릭터를 제외한 나머지 캐릭터들의 리스트도 만듬
+        
+            activeCharacters.Sort((a, b) => a.priority.CompareTo(b.priority)); //a,b값을 찾을건데 a의 우선순위와 b의 우선순위를 비교한다. b가 더크면 음수
+            activeCharacters.Concat(inactiveCharacters); //그 위에 액티브 안한 애들도 넣는다.
+
+            SortCharacters(activeCharacters);
+        }
+
+        private void SortCharacters(List<Character> charactersSortingOrder)
+        {
+            int i = 0;
+            foreach (Character character in charactersSortingOrder)
+            {
+                character.root.SetSiblingIndex(i++); //각 단계에서 이를 증가 시킨다
+            }
         }
 
 

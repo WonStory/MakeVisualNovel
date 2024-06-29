@@ -24,6 +24,7 @@ namespace CHARACTERS
         protected Color unhighlightedColor => new Color(color.r * UNHIGHLIGHTED_DARKEN_STENGTH, color.g * UNHIGHLIGHTED_DARKEN_STENGTH, color.b * UNHIGHLIGHTED_DARKEN_STENGTH, color.a);
         public bool highlighted { get; protected set; } = true;
         protected bool facingLeft = DEFALUT_ORIENTATION_IS_FACING_LEFT; //왼쪽으로 향하는 불을 만듬 조작하거나 엑세스말곤 건들기 싫어서 프로텍트
+        public int priority { get; protected set; } //공개적이되 캐릭터 자체만이 여기에서 직접 우선순위를 설정할 수 있도록함
 
         protected CharacterManager CharacterManager => CharacterManager.instance; //꽤 많이 참조할 것이므로 바로가기를 만들어준다.
 
@@ -302,6 +303,17 @@ namespace CHARACTERS
         {
             Debug.Log("Cannot flip a character of this type!");
             yield return null;
+        }
+
+        public void SetPriority(int priority, bool autoSortCharactersOnUI = true) //UI 우선순위(가려지기), 순위에 대한 정수(인덱스)
+        {
+            this.priority = priority;
+            
+            if (autoSortCharactersOnUI)
+            {
+                CharacterManager.SortCharacters();
+            }
+            
         }
 
         public enum CharacterType

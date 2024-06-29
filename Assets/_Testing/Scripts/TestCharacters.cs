@@ -29,7 +29,15 @@ namespace TESTING
             Character_Sprite Raelin = CreateCharacter("Raelin") as Character_Sprite;
             Character_Sprite Stella = CreateCharacter("Stella") as Character_Sprite;
         
+            yield return new WaitForSeconds(1);
 
+            Raelin.SetPriority(1);
+
+            yield return null;
+
+
+
+/*대화 하이라이트와 플립핑
             //Guard.Show();
             Stella.SetPosition(new Vector2(1, 0));
             Raelin.SetPosition(Vector2.zero);
@@ -63,9 +71,9 @@ namespace TESTING
             yield return Raelin.Say("yas baby");
 
             yield return null;
+*/
 
-
-/*
+/*바디와 페이스 바꾸는 법
             yield return new WaitForSeconds(1);
 
             Sprite body = Raelin.GetSprite("Raelin_2");
@@ -82,7 +90,7 @@ namespace TESTING
 
             yield return null;
             */
-            /*
+            /*각 대화 색과 폰트 바꾸는 법
             Character Elen = CharacterManager.instance.CreateCharacter("Elen");
             Character Adam = CharacterManager.instance.CreateCharacter("Adam");
             Character Ben = CharacterManager.instance.CreateCharacter("Benjamin");
