@@ -28,10 +28,26 @@ namespace TESTING
             //Character_Sprite Guard = CreateCharacter("Guard as Generic") as Character_Sprite;
             Character_Sprite Raelin = CreateCharacter("Raelin") as Character_Sprite;
             Character_Sprite Stella = CreateCharacter("Stella") as Character_Sprite;
+            Character_Sprite Guard = CreateCharacter("Guard as Generic") as Character_Sprite;
         
             yield return new WaitForSeconds(1);
 
-            Raelin.SetPriority(1);
+            Raelin.SetPriority(8); // 숫자가 클수록 우선순위가 높아짐
+            Stella.SetPriority(15);
+            Guard.SetPriority(1000);
+
+            yield return new WaitForSeconds(1);
+
+            CharacterManager.instance.SortCharacters(new string[] { "Stella", "Raelin"});
+
+            yield return new WaitForSeconds(1);
+
+            CharacterManager.instance.SortCharacters();
+
+            yield return new WaitForSeconds(1);
+
+            CharacterManager.instance.SortCharacters(new string[] { "Raelin", "Stella", "Guard"});
+            
 
             yield return null;
 

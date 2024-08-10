@@ -60,7 +60,7 @@ namespace CHARACTERS
 
             Character character = CreateCharacterFromInfo(info);
 
-            characters.Add(characterName.ToLower(), character); //동일한 문자를 2번생성하지 않도록 설정함.
+            characters.Add(info.name.ToLower(), character); //동일한 문자를 2번생성하지 않도록 설정함.
 
             return character;
         }
@@ -114,7 +114,7 @@ namespace CHARACTERS
             }
 
 
-/*
+/*위 스위치 함수를 다른 방법으로 표현한 것
             if (config.characterType == Character.CharacterType.Text)
             {
                 return new Character_Text(Info.name, config); //config를 넣음으로써 이름과 고유한 데이터가 들어간다.
@@ -147,14 +147,39 @@ namespace CHARACTERS
             SortCharacters(activeCharacters);
         }
 
+        public void SortCharacters(string[] characterNames)
+        {
+            List<Character> sortedCharacters = new List<Character>();
+
+            sortedCharacters = characterNames.Select(name => GetCharacter(name)).Where(character => character != null).ToList(); //선택기능으로 이름을 얻어냄. 널과같지 않아댐
+
+            List<Character> remainingCharacters = characters.Values.Except(sortedCharacters).OrderBy(character => character.priority).ToList(); //사전의 밸류값을 가져옴,단 위의 솔트 캐리터를 제외하고. 우선순위에따라 가져옴. 다 할당되면 0부터 다시 초기화시키기도함.
+            
+            sortedCharacters.Reverse();//뒤집는 이유는 앞에 적은 것을 우선순위로 하고 싶어서 뒤집어야 순서가 바뀜
+
+            int startingPriority = remainingCharacters.Count > 0 ? remainingCharacters.Max(c => c.priority) : 0; //0보다 큰 우선순위 지정이 수동으로 있었다면 그걸 따온다음 그거보다 크게 할거임. 
+            for (int i = 0; i < sortedCharacters.Count; i++)
+            {
+                Character character = sortedCharacters[i];
+                character.SetPriority(startingPriority + i + 1, autoSortCharactersOnUI : false);
+            }
+
+            List<Character> allCharacters = remainingCharacters.Concat(sortedCharacters).ToList(); //리스트 끼리 문자들을 연결함(더함)
+
+            SortCharacters(allCharacters);
+        }
+
         private void SortCharacters(List<Character> charactersSortingOrder)
         {
             int i = 0;
             foreach (Character character in charactersSortingOrder)
             {
                 character.root.SetSiblingIndex(i++); //각 단계에서 이를 증가 시킨다
+                Debug.Log($"{character.name} priority is {character.priority}");
             }
         }
+
+
 
 
 
