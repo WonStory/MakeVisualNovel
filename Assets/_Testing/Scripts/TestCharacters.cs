@@ -19,7 +19,7 @@ namespace TESTING
             //Character Fs2 = CharacterManager.instance.CreateCharacter("Raelin");
             // Character Stella2 = CharacterManager.instance.CreateCharacter("Stella");
             // Character Adam = CharacterManager.instance.CreateCharacter("Adam");
-            StartCoroutine(Test());
+            //StartCoroutine(Test());
         }
 
         IEnumerator Test()
@@ -30,6 +30,10 @@ namespace TESTING
             Character_Sprite Stella = CreateCharacter("Stella") as Character_Sprite;
             Character_Sprite Guard = CreateCharacter("Guard as Generic") as Character_Sprite;
         
+
+
+
+        //캐릭터 ui 우선순위 솔팅
             yield return new WaitForSeconds(1);
 
             Raelin.SetPriority(8); // 숫자가 클수록 우선순위가 높아짐
