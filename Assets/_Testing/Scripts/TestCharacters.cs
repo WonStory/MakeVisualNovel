@@ -19,7 +19,7 @@ namespace TESTING
             //Character Fs2 = CharacterManager.instance.CreateCharacter("Raelin");
             // Character Stella2 = CharacterManager.instance.CreateCharacter("Stella");
             // Character Adam = CharacterManager.instance.CreateCharacter("Adam");
-            //StartCoroutine(Test());
+            StartCoroutine(Test());
         }
 
         IEnumerator Test()
@@ -28,12 +28,40 @@ namespace TESTING
             //Character_Sprite Guard = CreateCharacter("Guard as Generic") as Character_Sprite;
             Character_Sprite Raelin = CreateCharacter("Raelin") as Character_Sprite;
             Character_Sprite Stella = CreateCharacter("Stella") as Character_Sprite;
-            Character_Sprite Guard = CreateCharacter("Guard as Generic") as Character_Sprite;
+            //Character_Sprite Guard = CreateCharacter("Guard as Generic") as Character_Sprite;
         
+            Raelin.SetPosition(new Vector2(0,0));
+            Stella.SetPosition(new Vector2(1,0));
+
+            yield return new WaitForSeconds(1);
+
+            Stella.TransitionSprite(Stella.GetSprite("Raelin_1"));
+            Stella.TransitionSprite(Stella.GetSprite("Raelin_11"), layer: 1);
+            Stella.Animate("Hop");
+            yield return Stella.Say("Where did this wind chill come from?");
+
+            Raelin.FaceRight();
+            Raelin.TransitionSprite(Raelin.GetSprite("Raelin_1"));
+            Raelin.TransitionSprite(Raelin.GetSprite("Raelin_11"), layer: 1);
+            Raelin.MoveToPosition(new Vector2(0.1f,0));
+            Raelin.Animate("Shiver", true);
+            Stella.Animate("Hop");
+            yield return Raelin.Say("I din't know - but I hate it!{a} It's freezing!");
+
+            Stella.TransitionSprite(Stella.GetSprite("Raelin_13"), layer:1);
+            yield return Stella.Say("Oh, it's over!");
+
+            Raelin.TransitionSprite(Raelin.GetSprite("Raelin_2"));
+            Raelin.TransitionSprite(Raelin.GetSprite("Raelin_13"), layer:1);
+            Raelin.Animate("Shiver", false);
+            yield return Raelin.Say("Thank the lord...{a} I'm not wearing enough clothes for that crap.");
+
+            yield return null;
 
 
 
-        //캐릭터 ui 우선순위 솔팅
+
+        /*캐릭터 ui 우선순위 솔팅
             yield return new WaitForSeconds(1);
 
             Raelin.SetPriority(8); // 숫자가 클수록 우선순위가 높아짐
@@ -54,7 +82,7 @@ namespace TESTING
             
 
             yield return null;
-
+*/
 
 
 /*대화 하이라이트와 플립핑

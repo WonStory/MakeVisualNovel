@@ -12,7 +12,9 @@ namespace CHARACTERS
         public const bool ENABLE_ON_START = true;
         private const float UNHIGHLIGHTED_DARKEN_STENGTH = 0.65F;
         public const bool DEFALUT_ORIENTATION_IS_FACING_LEFT = true; //기본방향을 정의하고 싶다. character_sprite에서 호출 가능하도록 pubic을 달아준다.
-        
+        public const string ANIMATION_REFRESH_TRIGGER = "Refresh";
+
+
         public string name = "";
         public string displayname = "";
         public RectTransform root = null; //각 캐릭터마다 다른 특징을 보유해야된다.
@@ -314,6 +316,17 @@ namespace CHARACTERS
                 CharacterManager.SortCharacters();
             }
             
+        }
+
+        public void Animate(string animation) //애니메이션을 시작할 수 있는 함수
+        {
+            animator.SetTrigger(animation);
+        }
+
+        public void Animate(string animation, bool state) 
+        {
+            animator.SetBool(animation, state);
+            animator.SetTrigger(ANIMATION_REFRESH_TRIGGER);
         }
 
         public enum CharacterType
