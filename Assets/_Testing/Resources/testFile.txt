@@ -1,7 +1,6 @@
-john "hello. i am anfksaka sdnksadnksa nsandk.{a} asdsajndnajsd?"
 
-world "nice too meet you. nice too meet you. {c}nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you.nice too meet you."
+enter Female Student 2 [female student 2 - happy] "I'm lacking"
 
-narrator "wait. {wa 2} shut up"
+enter Stella as ??? at 1 [0:Stella_1,1:Stella_11] "How is everyone doing today?"
 
-john "sorry. {wc 0.5} i am anfksaka sdnksadnksa nsandk.{a} asdsajndnajsd?"
+Raerin "Fine. {wa 0.5} Couldn't be better."

@@ -48,7 +48,7 @@ namespace CHARACTERS
 
         }
 
-        public Character CreateCharacter(string characterName)
+        public Character CreateCharacter(string characterName, bool revealAfterCreation = false)
         {
             if (characters.ContainsKey(characterName.ToLower())) //중복되는지 확인하는 키
             {
@@ -61,6 +61,11 @@ namespace CHARACTERS
             Character character = CreateCharacterFromInfo(info);
 
             characters.Add(info.name.ToLower(), character); //동일한 문자를 2번생성하지 않도록 설정함.
+
+            if (revealAfterCreation) //참이면 표현함(디폴트는 false)
+            {
+                character.Show();
+            }
 
             return character;
         }

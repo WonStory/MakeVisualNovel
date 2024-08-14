@@ -9,7 +9,7 @@ namespace CHARACTERS
 {
     public abstract class Character
     {
-        public const bool ENABLE_ON_START = true;
+        public const bool ENABLE_ON_START = false; //생성할때마다 자동으로 보이는지
         private const float UNHIGHLIGHTED_DARKEN_STENGTH = 0.65F;
         public const bool DEFALUT_ORIENTATION_IS_FACING_LEFT = true; //기본방향을 정의하고 싶다. character_sprite에서 호출 가능하도록 pubic을 달아준다.
         public const string ANIMATION_REFRESH_TRIGGER = "Refresh";
@@ -327,6 +327,11 @@ namespace CHARACTERS
         {
             animator.SetBool(animation, state);
             animator.SetTrigger(ANIMATION_REFRESH_TRIGGER);
+        }
+
+        public virtual void OnReceiveCastingExpression(int layer, string expression)
+        {
+            return;
         }
 
         public enum CharacterType
