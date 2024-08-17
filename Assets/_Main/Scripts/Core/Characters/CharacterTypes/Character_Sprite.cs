@@ -121,7 +121,7 @@ namespace CHARACTERS
 
             while (self.alpha != tarGetAlpha)
             {
-                self.alpha = Mathf.MoveTowards(self.alpha, tarGetAlpha, 3f * Time.deltaTime);
+                self.alpha = Mathf.MoveTowards(self.alpha, tarGetAlpha, 1f * Time.deltaTime);
                 yield return null;
             }
 

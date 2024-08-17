@@ -13,6 +13,8 @@ namespace COMMANDS
 
         public void AddCommand(string commandName, Delegate command)
         {
+            commandName = commandName.ToLower();
+            
             if (!database.ContainsKey(commandName))
             {
                 database.Add(commandName, command);
@@ -26,6 +28,8 @@ namespace COMMANDS
 
         public Delegate GetCommand(string commandName) //데이터베이스에 엑세스해야되지만 숨겨져있어서 명령을 가져오는 함수를 만들어서 공개한다. 대리자를 통해 명령관리자를 찾는다
         {
+            commandName = commandName.ToLower();
+
             if (!database.ContainsKey(commandName))
             {
                 Debug.LogError($"Command '{commandName}' does not exist in the database!");

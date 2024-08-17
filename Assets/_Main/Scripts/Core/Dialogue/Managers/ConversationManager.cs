@@ -128,7 +128,7 @@ namespace DIALOGUE
 
             foreach (DL_COMMAND_DATA.Command command in commands)
             {
-                if (command.waitForCompletion)
+                if (command.waitForCompletion || command.name == "wait") //기존의 가중치 웨잇이랑 직접 웨잇()도 포함하고싶어서
                 {
                     yield return CommandManager.Instance.Execute(command.name, command.arguments);
                 }

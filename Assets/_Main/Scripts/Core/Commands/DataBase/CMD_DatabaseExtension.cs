@@ -11,6 +11,9 @@ namespace COMMANDS
 
         }
 
+        public static CommandParameters ConvertDataToParameters(string[] data) => new CommandParameters(data); //데이터 배열을 가져온다음 새 커맨드 파라미터로 씀
+        
+
     }
 }
 
