@@ -20,7 +20,6 @@ namespace COMMANDS
         {
             database.AddCommand("createcharacter", new Action<string[]>(CreateCharacter));
             database.AddCommand("movecharacter", new Func<string[], IEnumerator>(MoveCharacter));
-            
             database.AddCommand("show", new Func<string[], IEnumerator>(ShowAll));
             database.AddCommand("hide", new Func<string[], IEnumerator>(HideAll));
         }
@@ -91,6 +90,7 @@ namespace COMMANDS
             }
             else
             {
+                CommandManager.Instance.AddTerminationActionToCurrentProcess(() => { character?.SetPosition(position); }); //캐릭터가 널이 아니라면 포지션을 참조해서 밷어라
                 yield return character.MoveToPosition(position, speed, smooth);
             }
         }
@@ -134,6 +134,13 @@ namespace COMMANDS
 
             if (!immediate)
             {
+                CommandManager.Instance.AddTerminationActionToCurrentProcess(() =>
+                {
+                    foreach (Character character in characters)
+                    {
+                        character.isVisible = true;
+                    }
+                });
                 while (characters.Any(c => c.isReaveling)) //소스가 있는지 확인한다.
                 {
                     yield return null;
@@ -145,6 +152,7 @@ namespace COMMANDS
         {
             List<Character> characters = new List<Character>();
             bool immediate = false; //즉시 전환을 할건지에 대한 불
+            float speed = 1f;
 
             foreach (string s in data) //입력받은 배열을 쪼개서 로컬 리스트에 다 넣는다
             {
@@ -164,6 +172,7 @@ namespace COMMANDS
             var parameters = ConvertDataToParameters(data); //변환한 데이터 전달함
 
             parameters.TryGetValue(PARAM_IMMEDIATE, out immediate, defaultValue: false);
+            parameters.TryGetValue(PARAM_SPEED, out speed, defaultValue: 1f); // 속도 파라미터 디폴트는 1f
 
             //로직을 불러옴
             foreach (Character character in characters)
@@ -174,12 +183,19 @@ namespace COMMANDS
                 }
                 else
                 {
-                    character.Hide(); //즉시가 아니면 그냥 쇼로
+                    character.Hide(speed); //즉시가 아니면 그냥 쇼로
                 }
             }
 
             if (!immediate)
             {
+                CommandManager.Instance.AddTerminationActionToCurrentProcess(() =>
+                {
+                    foreach (Character character in characters)
+                    {
+                        character.isVisible = false;
+                    }
+                });
                 while (characters.Any(c => c.isHiding)) //소스가 있는지 확인한다.
                 {
                     yield return null;

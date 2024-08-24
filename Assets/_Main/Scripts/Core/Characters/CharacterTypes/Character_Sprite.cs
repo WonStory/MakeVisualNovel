@@ -114,14 +114,14 @@ namespace CHARACTERS
             return spriteLayer.TransitionSprite(sprite, speed);
         }
 
-        public override IEnumerator ShowingOrHiding(bool show)
+        public override IEnumerator ShowingOrHiding(bool show, float speedMultiplier = 1f)
         {
             float tarGetAlpha = show ? 1f : 0;
             CanvasGroup self = rootCG;
 
             while (self.alpha != tarGetAlpha)
             {
-                self.alpha = Mathf.MoveTowards(self.alpha, tarGetAlpha, 1f * Time.deltaTime);
+                self.alpha = Mathf.MoveTowards(self.alpha, tarGetAlpha, 1f * Time.deltaTime * speedMultiplier);
                 yield return null;
             }
 

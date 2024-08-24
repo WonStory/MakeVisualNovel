@@ -100,7 +100,7 @@ namespace CHARACTERS
             return co_revealing;
         }
 
-        public virtual Coroutine Hide()
+        public virtual Coroutine Hide(float speedMultiplier = 1f)
         {
             if (isHiding)
             {
@@ -111,12 +111,12 @@ namespace CHARACTERS
                 CharacterManager.StopCoroutine(co_revealing);
             }
 
-            co_hiding = CharacterManager.StartCoroutine(ShowingOrHiding(false));
+            co_hiding = CharacterManager.StartCoroutine(ShowingOrHiding(false, speedMultiplier));
 
             return co_hiding;
         }
 
-        public virtual IEnumerator ShowingOrHiding(bool show) //현재 숨겨져있는지 나타나있는지 확인하는것
+        public virtual IEnumerator ShowingOrHiding(bool show, float speedMultiplier = 1f) //현재 숨겨져있는지 나타나있는지 확인하는것
         {
             Debug.Log("Show/hide cannot be called from a base character type");//기본문자유형에서 호출 불가능
             yield return null;

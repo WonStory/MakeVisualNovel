@@ -60,7 +60,7 @@ namespace DIALOGUE
                 if (line.hasDialogue)
                 {
                     yield return Line_RunDialogue(line);
-                    yield return WaitForUserInput(); //이게 대화마다 잠시 멈추게 해줌.
+                    //yield return WaitForUserInput(); //이게 대화마다 잠시 멈추게 해줌. - 건드리기 가능
                 }
 
                 //run any command
@@ -68,10 +68,12 @@ namespace DIALOGUE
                 {
                     yield return Line_RunCommands(line);
                 }
-                if (line.hasCommands)
+                if (line.hasDialogue)
                 {
-                    //사용자 입력을 기다려야댐
+                    //사용자 입력을 기다려야댐 - 건드리기 가능
                     yield return WaitForUserInput();
+
+                    CommandManager.Instance.StopAllProcesses();
                 }
 
             }
@@ -130,7 +132,17 @@ namespace DIALOGUE
             {
                 if (command.waitForCompletion || command.name == "wait") //기존의 가중치 웨잇이랑 직접 웨잇()도 포함하고싶어서
                 {
-                    yield return CommandManager.Instance.Execute(command.name, command.arguments);
+                    CoroutineWrapper cw =CommandManager.Instance.Execute(command.name, command.arguments); //원래는 코루틴이 다 실행될때까지 기다려야되지만 강제입력을 고려안한 코드임.
+                    while (!cw.IsDone)
+                    {
+                        if (userPrompt)
+                        {
+                            CommandManager.Instance.StopCurrentProcess();
+                            userPrompt = false; //리셋해줌(클릭한걸)
+                        }
+                        yield return null;
+                    }
+
                 }
                 else
                 {

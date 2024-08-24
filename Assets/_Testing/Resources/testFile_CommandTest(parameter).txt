@@ -1,0 +1,14 @@
+
+wait(1), CreateCharacter(Stella -e true), CreateCharacter(Raelin), CreateCharacter("Guard1 as Generic" -e true -i true)
+
+Movecharacter(Stella 1 -2.5 0.75)
+
+Show(Stella Raelin Guard1 -immediate false)
+
+Narrator "Showing characters"
+
+enter Female Student 2 [female student 2 - happy] "I'm lacking"
+
+enter Stella as ??? at 0.5:1.3 [0:Stella_1,1:Stella_11] "How is everyone doing today?"
+
+Raelin "Fine. {wa 0.5} Couldn't be better."

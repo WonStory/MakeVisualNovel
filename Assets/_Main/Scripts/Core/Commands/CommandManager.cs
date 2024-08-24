@@ -5,16 +5,18 @@ using System.Reflection;
 using System.Linq;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.Events;
 
 namespace COMMANDS
 {
     public class CommandManager : MonoBehaviour
     {
         public static CommandManager Instance { get; private set;} //인스턴스를 검색하기 위해 공개로 만들고 웨이크 내부에 할당하기 위해 비공개로 한다
-        private static Coroutine process = null;
-        public static bool isRunningProcess => process != null;
 
         private CommandDatabase database;
+
+        private List<CommandProcess> activeProcesses = new List<CommandProcess>(); //한번에 하나의 프로젝트를 하는것이 아님
+        private CommandProcess topProcess => activeProcesses.Last(); //목록에서 최상위 프로젝트, 만족하는 첫번째 프로젝트를 반환하거나 디폴트값을 반환 => 였다가 라스트를 호출해야된다고 수정, 바로 직전에 만들어진 마지막 프로세스
 
         private void Awake()
         {
@@ -40,7 +42,7 @@ namespace COMMANDS
             }
         }
 
-        public Coroutine Execute(string commandName, params string[] args) //실행할 함수, params는 가변인수를 전달하게 해준다
+        public CoroutineWrapper Execute(string commandName, params string[] args) //실행할 함수, params는 가변인수를 전달하게 해준다
         {
             Delegate command = database.GetCommand(commandName);
 
@@ -52,38 +54,66 @@ namespace COMMANDS
             return StartProcess(commandName, command, args);
         }
 
-        private Coroutine StartProcess(string commandName, Delegate command, string[] args)
+        private CoroutineWrapper StartProcess(string commandName, Delegate command, string[] args)
         {
-            StopCurrentProcess();
+            System.Guid processID = System.Guid.NewGuid(); //고유 넘버를 생성한다
+            CommandProcess cmd = new CommandProcess(processID, commandName, command, null, args, null);
+            activeProcesses.Add(cmd);
 
-            process = StartCoroutine(RunningProcess(command, args));
+            Coroutine co = StartCoroutine(RunningProcess(cmd));
 
-            return process;
+            cmd.runningProcess = new CoroutineWrapper(this, co);
+
+            return cmd.runningProcess;
         }
 
-        private void StopCurrentProcess()
+        public void StopCurrentProcess()
         {
-            if (process != null)
+            if (topProcess != null)
             {
-                StopCoroutine(process);
+                KillProcess(topProcess);
             }
-            
-            process = null;
         }
 
-        private IEnumerator RunningProcess(Delegate command, string[] args)
+        public void StopAllProcesses()
         {
-            yield return WaitingForProcessToComplete(command,args);
+            foreach (var c in activeProcesses)
+            {
+                if (c.runningProcess != null && !c.runningProcess.IsDone) //러닝중이고 아직 완료 전이라면 스탑한다.
+                {
+                    c.runningProcess.Stop();
+                }
 
+                c.onTerminateAction?.Invoke(); //호출할 작업이 있으면 호출
+            }
 
-            process = null;
+            activeProcesses.Clear();
+        }
+
+        private IEnumerator RunningProcess(CommandProcess process) //한번에 통합해서 넘길거라 명령과 인수로 넘기지 않음
+        {
+            yield return WaitingForProcessToComplete(process.command,process.args);
+
+            KillProcess(process); //프로세스를 널이라고 하는게 아닌 킬프로세스해버림
+        }
+
+        public void KillProcess(CommandProcess cmd) //종료하려는 명령프로세스를 전달받고 리무브해버림
+        {
+            activeProcesses.Remove(cmd);
+
+            if (cmd.runningProcess != null && !cmd.runningProcess.IsDone) //러닝프로세스가 있고 아직 안끝났으면 바로 스탑시킴
+            {
+                cmd.runningProcess.Stop();
+            }
+
+            cmd.onTerminateAction?.Invoke(); //종료할때 실행하도록 설정된 작업이 있으면(널이 아니면) 종료하고 계속해서 호출함
         }
 
         private IEnumerator WaitingForProcessToComplete(Delegate command, string[] args)
         {
             if (command is Action)
             {
-                command.DynamicInvoke();
+                command.DynamicInvoke(); //구독자목록을 순차적으로 실행하면서 null아니어야 엑세스가 가능
             }
             else if (command is Action<string>)
             {
@@ -107,7 +137,18 @@ namespace COMMANDS
             }
         }
 
+        public void AddTerminationActionToCurrentProcess(UnityAction action)
+        {
+            CommandProcess process = topProcess;
 
+            if (process == null) //최상위 프로세스가 없으면 아무것도 반환안함
+            {
+                return;
+            }
+
+            process.onTerminateAction = new UnityEvent();
+            process.onTerminateAction.AddListener(action);
+        }
 
 
     }
